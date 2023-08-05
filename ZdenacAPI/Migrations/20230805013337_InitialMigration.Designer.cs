@@ -12,7 +12,7 @@ using Zdenac_API.Data;
 namespace Zdenac_API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230804222356_InitialMigration")]
+    [Migration("20230805013337_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />

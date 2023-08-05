@@ -2,8 +2,8 @@ global using Zdenac_API.Models;
 global using Zdenac_API.Data;
 global using Microsoft.EntityFrameworkCore;
 global using Zdenac_API.Services;
-using DevExpress.Data.Browsing;
-using DataContext = Zdenac_API.Data.DataContext;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
