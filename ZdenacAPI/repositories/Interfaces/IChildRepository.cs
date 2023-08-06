@@ -7,7 +7,7 @@ namespace Zdenac_API.Repositories.Interfaces
         Task<List<Child>> GetAllChildren();
         Task<Child> GetChildById(int childId);
         Task DeleteChild(int childId);
-        Task<Child> AddChild(Child child);
-        Task UpdateChild(Child child, ChildDTO dto);
+        Task AddChild(Child child);
+        Task UpdateChild(Child child);
     }
 }
