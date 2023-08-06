@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Exchange.WebServices.Data;
-
+using Zdenac_API.Models.DTOs;
+using Zdenac_API.Services.Interfaces;
 
 namespace Zdenac_API.Controllers
 {
@@ -10,21 +11,93 @@ namespace Zdenac_API.Controllers
     [ApiController]
     public class ChildController : ControllerBase
     {
-        private readonly DataContext _context;
+        private readonly IChildService _childService;
 
-        public ChildController(DataContext context)
+        public ChildController(IChildService childService)
         {
-            _context = context;
+            _childService = childService;
         }
-        [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<Child>>>> GetChildren()
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> AddChild([FromBody] ChildDTO model)
         {
-            var ListOfChildren = await _context.Children.ToListAsync();
-            var response = new ServiceResponse<List<Child>>()
+            if (!ModelState.IsValid)
             {
-                Data = ListOfChildren
-            };
-            return Ok(response);
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _childService.AddChild(model);
+                return CreatedAtAction("GetChildById", new { id = model.Id }, model);
+            }
+            catch (Exception ex)
+            {
+                
+                return StatusCode(500, "An error occurred while adding the child.");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _childService.DeleteChild(id);
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Update(int id, [FromBody] ChildDTO model)
+        {
+            if (id != model.Id)
+            {
+                return BadRequest();
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                await _childService.UpdateChild(id, model);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                return StatusCode(500, "An error occurred while updating the child.");
+            }
+        }
+
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<IEnumerable<Child>>> GetAllChildren()
+        {
+            var children = await _childService.GetAllChildren();
+            return Ok(children);
+        }
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<Child>> GetChildById(int id)
+        {
+            var child = await _childService.GetChildById(id);
+
+            if (child == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(child);
         }
     }
 }
