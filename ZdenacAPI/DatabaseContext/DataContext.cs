@@ -100,12 +100,59 @@ namespace Zdenac_API.Data
                 .WithMany() // or .WithMany(u => u.Parents) if you have a collection on the User side
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
+          
+            modelBuilder.Entity<Log>()
+        .HasOne(l => l.User)
+        .WithMany() // or .WithMany(u => u.Logs) if you have a collection on the User side
+        .HasForeignKey(l => l.UserId)
+        .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Session>()
+                .HasOne(s => s.Child)
+                .WithMany() // Assuming Child does not have a navigation property for Sessions
+                .HasForeignKey(s => s.ChildId)
+                .OnDelete(DeleteBehavior.NoAction); // Or .OnDelete(DeleteBehavior.NoAction) based on your requirement
+
+            modelBuilder.Entity<Session>()
+                .HasOne(s => s.User)
+                .WithMany() // Assuming User does not have a navigation property for Sessions
+                .HasForeignKey(s => s.UserId)
+                .OnDelete(DeleteBehavior.NoAction); // Or .OnDelete(DeleteBehavior.NoAction) based on your requirement
+
+            modelBuilder.Entity<PasswordReset>()
+               .HasOne(pr => pr.User)
+               .WithMany() // Assuming User does not have a navigation property for PasswordResets
+               .HasForeignKey(pr => pr.UserId)
+               .OnDelete(DeleteBehavior.NoAction); // Or .OnDelete(DeleteBehavior.NoAction) based on your requirement
+
+            // Configure Notification relationships
+            modelBuilder.Entity<Notification>()
+                .HasOne(n => n.User)
+                .WithMany() // Assuming User does not have a navigation property for Notifications
+                .HasForeignKey(n => n.UserId)
+                .OnDelete(DeleteBehavior.NoAction); // Or .OnDelete(DeleteBehavior.NoAction) based on your requirement
+
 
         }
 
 
         public DbSet<Child> Children { get; set; }
-       
+        public DbSet<User> Users { get; set; }
+        public DbSet<Parent> Parents { get; set; }
+        public DbSet<Log> Logs { get; set; }
+        public DbSet<Session> Sessions { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<Country> Countries { get; set; }
+        public DbSet<Donation> Donations { get; set; }
+        public DbSet<DonationType> DonationTypes { get; set; }
+        public DbSet<Gender> Genders { get; set; }
+        public DbSet<Institution> Institutions { get; set; }
+        public DbSet<Location> Locations { get; set; }
+        public DbSet<Multimedia> Multimedias { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<PasswordReset> PasswordResets { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        
 
     }
 }

@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Zdenac_API.Migrations
 {
     /// <inheritdoc />
-    public partial class firstOne : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "City",
+                name: "Cities",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -22,11 +22,11 @@ namespace Zdenac_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_City", x => x.Id);
+                    table.PrimaryKey("PK_Cities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Country",
+                name: "Countries",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -35,11 +35,11 @@ namespace Zdenac_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Country", x => x.Id);
+                    table.PrimaryKey("PK_Countries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "DonationType",
+                name: "DonationTypes",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -49,11 +49,11 @@ namespace Zdenac_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DonationType", x => x.Id);
+                    table.PrimaryKey("PK_DonationTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Gender",
+                name: "Genders",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -62,11 +62,11 @@ namespace Zdenac_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Gender", x => x.Id);
+                    table.PrimaryKey("PK_Genders", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Role",
+                name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -76,11 +76,11 @@ namespace Zdenac_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Role", x => x.Id);
+                    table.PrimaryKey("PK_Roles", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Location",
+                name: "Locations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -91,23 +91,23 @@ namespace Zdenac_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Location", x => x.Id);
+                    table.PrimaryKey("PK_Locations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Location_City_CityId",
+                        name: "FK_Locations_Cities_CityId",
                         column: x => x.CityId,
-                        principalTable: "City",
+                        principalTable: "Cities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Location_Country_CountryId",
+                        name: "FK_Locations_Countries_CountryId",
                         column: x => x.CountryId,
-                        principalTable: "Country",
+                        principalTable: "Countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -130,29 +130,29 @@ namespace Zdenac_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_Gender_GenderId",
+                        name: "FK_Users_Genders_GenderId",
                         column: x => x.GenderId,
-                        principalTable: "Gender",
+                        principalTable: "Genders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_User_Location_LocationId",
+                        name: "FK_Users_Locations_LocationId",
                         column: x => x.LocationId,
-                        principalTable: "Location",
+                        principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_User_Role_RoleId",
+                        name: "FK_Users_Roles_RoleId",
                         column: x => x.RoleId,
-                        principalTable: "Role",
+                        principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Institution",
+                name: "Institutions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -164,13 +164,74 @@ namespace Zdenac_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Institution", x => x.Id);
+                    table.PrimaryKey("PK_Institutions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Institution_User_GuardianId",
+                        name: "FK_Institutions_Users_GuardianId",
                         column: x => x.GuardianId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Logs",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Action = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ActionDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Logs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Logs_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateSent = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PasswordResets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ResetToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ResetDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PasswordResets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PasswordResets_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -197,27 +258,27 @@ namespace Zdenac_API.Migrations
                 {
                     table.PrimaryKey("PK_Children", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Children_Gender_GenderId",
+                        name: "FK_Children_Genders_GenderId",
                         column: x => x.GenderId,
-                        principalTable: "Gender",
+                        principalTable: "Genders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Children_Institution_InstitutionId",
+                        name: "FK_Children_Institutions_InstitutionId",
                         column: x => x.InstitutionId,
-                        principalTable: "Institution",
+                        principalTable: "Institutions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Children_Location_BirthLocationId",
+                        name: "FK_Children_Locations_BirthLocationId",
                         column: x => x.BirthLocationId,
-                        principalTable: "Location",
+                        principalTable: "Locations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Donation",
+                name: "Donations",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -231,29 +292,29 @@ namespace Zdenac_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Donation", x => x.Id);
+                    table.PrimaryKey("PK_Donations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Donation_Children_ChildId",
+                        name: "FK_Donations_Children_ChildId",
                         column: x => x.ChildId,
                         principalTable: "Children",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Donation_DonationType_DonationTypeId",
+                        name: "FK_Donations_DonationTypes_DonationTypeId",
                         column: x => x.DonationTypeId,
-                        principalTable: "DonationType",
+                        principalTable: "DonationTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Donation_User_SponsorId",
+                        name: "FK_Donations_Users_SponsorId",
                         column: x => x.SponsorId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Multimedia",
+                name: "Multimedias",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -266,23 +327,23 @@ namespace Zdenac_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Multimedia", x => x.Id);
+                    table.PrimaryKey("PK_Multimedias", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Multimedia_Children_ChildId",
+                        name: "FK_Multimedias_Children_ChildId",
                         column: x => x.ChildId,
                         principalTable: "Children",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Multimedia_User_UserId",
+                        name: "FK_Multimedias_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Parent",
+                name: "Parents",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -293,16 +354,43 @@ namespace Zdenac_API.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Parent", x => x.Id);
+                    table.PrimaryKey("PK_Parents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Parent_Children_ChildId",
+                        name: "FK_Parents_Children_ChildId",
                         column: x => x.ChildId,
                         principalTable: "Children",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Parent_User_UserId",
+                        name: "FK_Parents_Users_UserId",
                         column: x => x.UserId,
-                        principalTable: "User",
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Sessions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChildId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Approved = table.Column<bool>(type: "bit", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Sessions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Sessions_Children_ChildId",
+                        column: x => x.ChildId,
+                        principalTable: "Children",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Sessions_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
@@ -322,68 +410,93 @@ namespace Zdenac_API.Migrations
                 column: "InstitutionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Donation_ChildId",
-                table: "Donation",
+                name: "IX_Donations_ChildId",
+                table: "Donations",
                 column: "ChildId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Donation_DonationTypeId",
-                table: "Donation",
+                name: "IX_Donations_DonationTypeId",
+                table: "Donations",
                 column: "DonationTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Donation_SponsorId",
-                table: "Donation",
+                name: "IX_Donations_SponsorId",
+                table: "Donations",
                 column: "SponsorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Institution_GuardianId",
-                table: "Institution",
+                name: "IX_Institutions_GuardianId",
+                table: "Institutions",
                 column: "GuardianId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Location_CityId",
-                table: "Location",
+                name: "IX_Locations_CityId",
+                table: "Locations",
                 column: "CityId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Location_CountryId",
-                table: "Location",
+                name: "IX_Locations_CountryId",
+                table: "Locations",
                 column: "CountryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Multimedia_ChildId",
-                table: "Multimedia",
-                column: "ChildId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Multimedia_UserId",
-                table: "Multimedia",
+                name: "IX_Logs_UserId",
+                table: "Logs",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parent_ChildId",
-                table: "Parent",
+                name: "IX_Multimedias_ChildId",
+                table: "Multimedias",
                 column: "ChildId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Parent_UserId",
-                table: "Parent",
+                name: "IX_Multimedias_UserId",
+                table: "Multimedias",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_GenderId",
-                table: "User",
+                name: "IX_Notifications_UserId",
+                table: "Notifications",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parents_ChildId",
+                table: "Parents",
+                column: "ChildId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parents_UserId",
+                table: "Parents",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PasswordResets_UserId",
+                table: "PasswordResets",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sessions_ChildId",
+                table: "Sessions",
+                column: "ChildId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Sessions_UserId",
+                table: "Sessions",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_GenderId",
+                table: "Users",
                 column: "GenderId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_LocationId",
-                table: "User",
+                name: "IX_Users_LocationId",
+                table: "Users",
                 column: "LocationId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_RoleId",
-                table: "User",
+                name: "IX_Users_RoleId",
+                table: "Users",
                 column: "RoleId");
         }
 
@@ -391,40 +504,52 @@ namespace Zdenac_API.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Donation");
+                name: "Donations");
 
             migrationBuilder.DropTable(
-                name: "Multimedia");
+                name: "Logs");
 
             migrationBuilder.DropTable(
-                name: "Parent");
+                name: "Multimedias");
 
             migrationBuilder.DropTable(
-                name: "DonationType");
+                name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "Parents");
+
+            migrationBuilder.DropTable(
+                name: "PasswordResets");
+
+            migrationBuilder.DropTable(
+                name: "Sessions");
+
+            migrationBuilder.DropTable(
+                name: "DonationTypes");
 
             migrationBuilder.DropTable(
                 name: "Children");
 
             migrationBuilder.DropTable(
-                name: "Institution");
+                name: "Institutions");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "Gender");
+                name: "Genders");
 
             migrationBuilder.DropTable(
-                name: "Location");
+                name: "Locations");
 
             migrationBuilder.DropTable(
-                name: "Role");
+                name: "Roles");
 
             migrationBuilder.DropTable(
-                name: "City");
+                name: "Cities");
 
             migrationBuilder.DropTable(
-                name: "Country");
+                name: "Countries");
         }
     }
 }
