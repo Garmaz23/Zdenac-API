@@ -41,3 +41,4 @@ namespace Zdenac_API.Models.DTOs
         public string Remark { get; set; }
     }
 }
+

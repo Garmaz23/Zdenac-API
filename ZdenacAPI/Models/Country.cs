@@ -5,9 +5,7 @@ namespace Zdenac_API.Models
     public class Country
     {
         public int Id { get; set; }
-
-        [Required]
-        [StringLength(50)]
         public string CountryName { get; set; }
     }
+
 }
