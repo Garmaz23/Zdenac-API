@@ -75,11 +75,37 @@ namespace Zdenac_API.Data
                 .HasForeignKey(l => l.CountryId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Other relationships, constraints, and configurations can be added here as needed
+            // Donation - User relationship
+            modelBuilder.Entity<Donation>()
+                .HasOne(d => d.Sponsor) // Assuming User property exists in Donation class
+                .WithMany()
+                .HasForeignKey(d => d.SponsorId)
+                .OnDelete(DeleteBehavior.Restrict); // Restricting to prevent multiple cascade paths
+            
+
+            modelBuilder.Entity<Multimedia>()
+                .HasOne(m => m.User)
+                .WithMany()
+                .HasForeignKey(m => m.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+  
+            modelBuilder.Entity<Parent>()
+                    .HasOne(p => p.Child)
+                    .WithMany() // or .WithMany(c => c.Parents) if you have a collection on the Child side
+                    .HasForeignKey(p => p.ChildId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Parent>()
+                .HasOne(p => p.User)
+                .WithMany() // or .WithMany(u => u.Parents) if you have a collection on the User side
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
 
 
         public DbSet<Child> Children { get; set; }
-    
+       
+
     }
 }

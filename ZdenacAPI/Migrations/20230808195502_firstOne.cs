@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Zdenac_API.Migrations
 {
     /// <inheritdoc />
-    public partial class NewModels : Migration
+    public partial class firstOne : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,20 @@ namespace Zdenac_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Country", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DonationType",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DonationType", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -202,6 +216,96 @@ namespace Zdenac_API.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Donation",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DonationTypeId = table.Column<int>(type: "int", nullable: false),
+                    ChildId = table.Column<int>(type: "int", nullable: false),
+                    SponsorId = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false),
+                    DonationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Donation", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Donation_Children_ChildId",
+                        column: x => x.ChildId,
+                        principalTable: "Children",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Donation_DonationType_DonationTypeId",
+                        column: x => x.DonationTypeId,
+                        principalTable: "DonationType",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Donation_User_SponsorId",
+                        column: x => x.SponsorId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Multimedia",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChildId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    MediaType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MediaLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DateAdded = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Multimedia", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Multimedia_Children_ChildId",
+                        column: x => x.ChildId,
+                        principalTable: "Children",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Multimedia_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Parent",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ChildId = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    Note = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Parent", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Parent_Children_ChildId",
+                        column: x => x.ChildId,
+                        principalTable: "Children",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Parent_User_UserId",
+                        column: x => x.UserId,
+                        principalTable: "User",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Children_BirthLocationId",
                 table: "Children",
@@ -218,6 +322,21 @@ namespace Zdenac_API.Migrations
                 column: "InstitutionId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Donation_ChildId",
+                table: "Donation",
+                column: "ChildId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Donation_DonationTypeId",
+                table: "Donation",
+                column: "DonationTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Donation_SponsorId",
+                table: "Donation",
+                column: "SponsorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Institution_GuardianId",
                 table: "Institution",
                 column: "GuardianId");
@@ -231,6 +350,26 @@ namespace Zdenac_API.Migrations
                 name: "IX_Location_CountryId",
                 table: "Location",
                 column: "CountryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Multimedia_ChildId",
+                table: "Multimedia",
+                column: "ChildId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Multimedia_UserId",
+                table: "Multimedia",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parent_ChildId",
+                table: "Parent",
+                column: "ChildId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Parent_UserId",
+                table: "Parent",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_GenderId",
@@ -251,6 +390,18 @@ namespace Zdenac_API.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Donation");
+
+            migrationBuilder.DropTable(
+                name: "Multimedia");
+
+            migrationBuilder.DropTable(
+                name: "Parent");
+
+            migrationBuilder.DropTable(
+                name: "DonationType");
+
             migrationBuilder.DropTable(
                 name: "Children");
 

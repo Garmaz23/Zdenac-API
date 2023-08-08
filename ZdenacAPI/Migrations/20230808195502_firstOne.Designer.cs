@@ -12,8 +12,8 @@ using Zdenac_API.Data;
 namespace Zdenac_API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230808114725_NewModels")]
-    partial class NewModels
+    [Migration("20230808195502_firstOne")]
+    partial class firstOne
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -126,6 +126,64 @@ namespace Zdenac_API.Migrations
                     b.ToTable("Country");
                 });
 
+            modelBuilder.Entity("Zdenac_API.Models.Donation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DonationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DonationTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SponsorId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("DonationTypeId");
+
+                    b.HasIndex("SponsorId");
+
+                    b.ToTable("Donation");
+                });
+
+            modelBuilder.Entity("Zdenac_API.Models.DonationType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DonationType");
+                });
+
             modelBuilder.Entity("Zdenac_API.Models.Gender", b =>
                 {
                     b.Property<int>("Id")
@@ -198,6 +256,67 @@ namespace Zdenac_API.Migrations
                     b.HasIndex("CountryId");
 
                     b.ToTable("Location");
+                });
+
+            modelBuilder.Entity("Zdenac_API.Models.Multimedia", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("MediaLink")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MediaType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Multimedia");
+                });
+
+            modelBuilder.Entity("Zdenac_API.Models.Parent", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChildId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChildId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Parent");
                 });
 
             modelBuilder.Entity("Zdenac_API.Models.Role", b =>
@@ -321,6 +440,33 @@ namespace Zdenac_API.Migrations
                     b.Navigation("Institution");
                 });
 
+            modelBuilder.Entity("Zdenac_API.Models.Donation", b =>
+                {
+                    b.HasOne("Zdenac_API.Models.Child", "Child")
+                        .WithMany()
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Zdenac_API.Models.DonationType", "DonationType")
+                        .WithMany()
+                        .HasForeignKey("DonationTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Zdenac_API.Models.User", "Sponsor")
+                        .WithMany()
+                        .HasForeignKey("SponsorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Child");
+
+                    b.Navigation("DonationType");
+
+                    b.Navigation("Sponsor");
+                });
+
             modelBuilder.Entity("Zdenac_API.Models.Institution", b =>
                 {
                     b.HasOne("Zdenac_API.Models.User", "Guardian")
@@ -349,6 +495,44 @@ namespace Zdenac_API.Migrations
                     b.Navigation("City");
 
                     b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("Zdenac_API.Models.Multimedia", b =>
+                {
+                    b.HasOne("Zdenac_API.Models.Child", "Child")
+                        .WithMany()
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Zdenac_API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Child");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Zdenac_API.Models.Parent", b =>
+                {
+                    b.HasOne("Zdenac_API.Models.Child", "Child")
+                        .WithMany()
+                        .HasForeignKey("ChildId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Zdenac_API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Child");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Zdenac_API.Models.User", b =>
