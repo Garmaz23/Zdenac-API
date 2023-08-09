@@ -6,25 +6,29 @@ using Zdenac_API;
 using Microsoft.Exchange.WebServices.Data;
 using Zdenac_API.Repositories.Interfaces;
 using Zdenac_API.Repositories;
+using Zdenac_API.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+
 IServiceCollection serviceCollection = builder.Services.AddDbContext<DataContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(Program));
 
+builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAutoMapper(typeof(MappingProfiles));
 
 
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
+builder.Services.AddScoped<IChildService, ChildService>();
 
 
 

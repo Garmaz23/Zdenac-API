@@ -17,11 +17,12 @@ namespace Zdenac_API.Repositories
 
         public async Task AddChild(Child child)
         {
-            if (child != null)
-            {
-                _dbContext.Children.Add(child);
-                await _dbContext.SaveChangesAsync();
-            }
+            
+                if (child != null)
+                {
+                    _dbContext.Children.Add(child);
+                    await _dbContext.SaveChangesAsync();
+                }
 
         }
 
