@@ -20,7 +20,7 @@ namespace Zdenac_API.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> AddChild([FromBody] ChildDTO model)
         {
@@ -36,8 +36,9 @@ namespace Zdenac_API.Controllers
             }
             catch (Exception ex)
             {
-                
-                return StatusCode(500, "An error occurred while adding the child.");
+
+                return BadRequest($"An error occurred while adding the child: {ex.Message}");
+
             }
         }
 
