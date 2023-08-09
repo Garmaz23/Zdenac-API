@@ -11,11 +11,14 @@ namespace Zdenac_API.Controllers
     [ApiController]
     public class ChildController : ControllerBase
     {
+     
         private readonly IChildService _childService;
+        private readonly ILogger<ChildController> _logger;  
 
-        public ChildController(IChildService childService)
+        public ChildController(IChildService childService, ILogger<ChildController> logger)
         {
             _childService = childService;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -26,20 +29,16 @@ namespace Zdenac_API.Controllers
         {
             if (!ModelState.IsValid)
             {
+                _logger.LogError($"Invalid PUT attempt in {nameof(AddChild)}");
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                await _childService.AddChild(model);
-                return CreatedAtAction("GetChildById", new { id = model.Id }, model);
-            }
-            catch (Exception ex)
-            {
+            _logger.LogInformation("Prosa put JEEEESSSSS");
+            await _childService.AddChild(model);
+            return CreatedAtAction("GetChildById", new { id = model.Id }, model);
 
-                return BadRequest($"An error occurred while adding the child: {ex.Message}");
 
-            }
+
         }
 
         [HttpDelete("{id}")]
