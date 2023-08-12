@@ -9,6 +9,7 @@ using Zdenac_API.Repositories;
 using Zdenac_API.Services.Interfaces;
 using Serilog;
 using Log = Serilog.Log;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,9 @@ IServiceCollection serviceCollection = builder.Services.AddDbContext<DataContext
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+
+
 
 var logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)

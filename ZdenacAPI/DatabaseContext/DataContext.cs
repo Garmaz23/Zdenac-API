@@ -1,10 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using Zdenac_API.Models;
 
 namespace Zdenac_API.Data
 {
-    public class DataContext:DbContext
+    public class DataContext:IdentityDbContext<ApiUser>
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         {
