@@ -7,7 +7,8 @@ namespace Zdenac_API
     {
         public AutoMapper()
         {
-            CreateMap<ChildDTO, Child>();
+            CreateMap<ChildDTO, Child>().ReverseMap();
+            CreateMap<ApiUser, UserDTO>().ReverseMap();
         }
     }
 }
