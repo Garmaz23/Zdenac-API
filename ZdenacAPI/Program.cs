@@ -22,7 +22,8 @@ IServiceCollection serviceCollection = builder.Services.AddDbContext<DataContext
 });
 
 
-
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
 
 var logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)

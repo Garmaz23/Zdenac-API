@@ -1,6 +1,11 @@
-﻿namespace Zdenac_API.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Zdenac_API.Models
 {
-    public class ApiUser
+    public class ApiUser : IdentityUser
     {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
+ 

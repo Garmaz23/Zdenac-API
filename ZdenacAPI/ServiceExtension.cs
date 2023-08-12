@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Serilog;
 using Log = Serilog.Log;
 
@@ -6,6 +7,12 @@ namespace Zdenac_API
 {
     public static class ServiceExtension
     {
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            var builder = services.AddIdentityCore<ApiUser>(u => u.User.RequireUniqueEmail = true);
+            builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), services);
+            builder.AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
+        }
         public static void ConfigureExceptionHandler(this IApplicationBuilder app)
         {
             app.UseExceptionHandler(error =>
