@@ -11,9 +11,9 @@ namespace Zdenac_API.Controllers
     [ApiController]
     public class ChildController : ControllerBase
     {
-     
+
         private readonly IChildService _childService;
-        private readonly ILogger<ChildController> _logger;  
+        private readonly ILogger<ChildController> _logger;
 
         public ChildController(IChildService childService, ILogger<ChildController> logger)
         {
@@ -64,16 +64,11 @@ namespace Zdenac_API.Controllers
                 return BadRequest(ModelState);
             }
 
-            try
-            {
-                await _childService.UpdateChild(id, model);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                // Log the error
-                return StatusCode(500, "An error occurred while updating the child.");
-            }
+
+            await _childService.UpdateChild(id, model);
+            return NoContent();
+
+
         }
 
         [HttpGet]
