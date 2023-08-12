@@ -17,12 +17,12 @@ namespace Zdenac_API.Repositories
 
         public async Task AddChild(Child child)
         {
-            
-                if (child != null)
-                {
-                    _dbContext.Children.Add(child);
-                    await _dbContext.SaveChangesAsync();
-                }
+
+            if (child != null)
+            {
+                _dbContext.Children.Add(child);
+                await _dbContext.SaveChangesAsync();
+            }
 
         }
 
@@ -50,7 +50,7 @@ namespace Zdenac_API.Repositories
         {
             if (child != null)
             {
-                
+
                 _dbContext.Entry(child).State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
             }
