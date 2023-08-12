@@ -66,8 +66,10 @@ namespace Zdenac_API.Controllers
                 return BadRequest(ModelState);
             }
 
+
             await _childService.UpdateChild(id, model);
             return NoContent();
+
 
         }
 
