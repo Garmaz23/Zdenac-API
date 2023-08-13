@@ -23,6 +23,7 @@ namespace Zdenac_API.Controllers
             _mapper = mapper;
         }
         [HttpPost]
+        [Route("register")]
         public async Task<IActionResult> Register([FromBody] UserDTO userDTO)
         {
             _logger.LogInformation($"Registration Attempt for {userDTO.Email}");
@@ -44,6 +45,7 @@ namespace Zdenac_API.Controllers
         }
 
         [HttpPost]
+        [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDTO userDTO)
         {
             _logger.LogInformation($"Login Attempt for {userDTO.Email}");

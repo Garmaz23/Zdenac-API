@@ -14,7 +14,7 @@ namespace Zdenac_API.Models.DTOs
         [StringLength(15, ErrorMessage = "Your Password is limited to 15 characters")]
         public string Password { get; set; }
     }
-    public class UserDTO : LoginDTO
+    public class UserDTO : LoginUserDTO
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
