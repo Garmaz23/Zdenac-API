@@ -18,7 +18,7 @@ namespace Zdenac_API.Controllers
         public AccountController(UserManager<ApiUser> userManager, SignInManager<ApiUser> signInManager, ILogger<AccountController> logger, IMapper mapper)
         {
             _userManager = userManager;
-            _signInManager = signInManager; 
+            _signInManager = signInManager;
             _logger = logger;
             _mapper = mapper;
         }
@@ -26,7 +26,41 @@ namespace Zdenac_API.Controllers
         public async Task<IActionResult> Register([FromBody] UserDTO userDTO)
         {
             _logger.LogInformation($"Registration Attempt for {userDTO.Email}");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
 
+            var user = _mapper.Map<ApiUser>(userDTO);
+            var result = await _userManager.CreateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest("User Register Attempt Failed");
+            }
+
+            return Accepted();
+
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login([FromBody] LoginUserDTO userDTO)
+        {
+            _logger.LogInformation($"Login Attempt for {userDTO.Email}");
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var result = await _signInManager.PasswordSignInAsync(userDTO.Email, userDTO.Password, false, false);
+
+            if (!result.Succeeded)
+            {
+                return Unauthorized(userDTO);
+            }
+
+            return Accepted();
 
         }
     }
