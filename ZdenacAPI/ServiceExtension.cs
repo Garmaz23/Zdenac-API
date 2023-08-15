@@ -28,7 +28,7 @@ namespace Zdenac_API
                         await context.Response.WriteAsync(new Error
                         {
                             StatusCode = context.Response.StatusCode,
-                            Message = "Internal server error. Please try again later."
+                            Message = "Something went wrong in the application"
                         }.ToString());
                     }
 

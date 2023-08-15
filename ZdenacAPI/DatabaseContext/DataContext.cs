@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using Zdenac_API.Models;
+
 
 namespace Zdenac_API.Data
 {
@@ -13,6 +16,8 @@ namespace Zdenac_API.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             // User - Role relationship
             modelBuilder.Entity<User>()
                 .HasOne(u => u.Role)
