@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Zdenac_API.Models.DTOs;
 
-namespace Zdenac_API
+namespace Zdenac_API.Configurations
 {
-    public class AutoMapper:Profile
+    public class AutoMapper : Profile
     {
         public AutoMapper()
         {

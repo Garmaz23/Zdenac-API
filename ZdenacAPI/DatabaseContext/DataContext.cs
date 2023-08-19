@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
+using Zdenac_API.Configurations;
 using Zdenac_API.Models;
 
 
@@ -17,6 +18,8 @@ namespace Zdenac_API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
 
             // User - Role relationship
             modelBuilder.Entity<User>()
