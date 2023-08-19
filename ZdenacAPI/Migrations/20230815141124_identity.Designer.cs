@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Zdenac_API.Data;
 
@@ -11,9 +12,11 @@ using Zdenac_API.Data;
 namespace Zdenac_API.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230815141124_identity")]
+    partial class identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,20 +50,6 @@ namespace Zdenac_API.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "cb8bf11e-3390-42f9-8baa-1dff3149a223",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "70e1e2e2-28c5-484b-a40b-7e820286c1a8",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

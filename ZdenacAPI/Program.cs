@@ -9,8 +9,13 @@ using Zdenac_API.Repositories;
 using Zdenac_API.Services.Interfaces;
 using Serilog;
 using Log = Serilog.Log;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.WebSockets;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
 
 // Add services to the container.
 
@@ -19,6 +24,11 @@ IServiceCollection serviceCollection = builder.Services.AddDbContext<DataContext
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+
+builder.Services.AddAuthentication();
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
 
 var logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
@@ -45,11 +55,45 @@ builder.Services.AddCors(options =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(
+    c =>
+    {
+        c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+        {
+            Description = @"JWT Authorization header using the Bearer scheme.
+            Enter 'Bearer' [space] and then your token in the text input below.
+            Example: 'Bearer 12345abcdef'",
+            Name = "Authorization",
+            In = ParameterLocation.Header,
+            Type = SecuritySchemeType.ApiKey,
+            Scheme = "Bearer"
+        });
+
+        c.AddSecurityRequirement(new OpenApiSecurityRequirement() {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                },
+                Scheme = "oauth2",
+                Name = "Bearer",
+                In = ParameterLocation.Header
+            },
+            new List<string>()
+            }
+    });
+});
+
+
 
 
 builder.Services.AddScoped<IChildRepository, ChildRepository>();
 builder.Services.AddScoped<IChildService, ChildService>();
+builder.Services.AddScoped<IAuthManager, AuthManager>();
+
 
 builder.Host.UseSerilog();
 
@@ -62,7 +106,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.ConfigureExceptionHandler();
+//app.ConfigureExceptionHandler();
 
 app.UseSerilogRequestLogging();
 
@@ -70,8 +114,10 @@ app.UseCors("AllowAll");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+app.Run(); 
